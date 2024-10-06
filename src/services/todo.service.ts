@@ -1,16 +1,17 @@
 import { CreateTodoDto } from "src/modules/todo/dto/create.todo.dto";
 import { UpdateTodoDto } from "src/modules/todo/dto/update.todo.dto";
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, Inject } from "@nestjs/common";
 
-import { InjectRepository } from '@nestjs/typeorm';
-import { Todo } from "src/modules/todo/entities/todo.entity";
-import { Repository } from "typeorm";
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Todo } from "src/modules/todo/entities/todo.entity";
+// import { Repository } from "typeorm";
+import { InterfaceTodoRepository } from "src/repositories/interface.todo";
 
 @Injectable()
 export class TodoService {
     constructor(
-        @InjectRepository(Todo)
-        private readonly todoRepository: Repository<Todo>
+        @Inject('InterfaceTodoRepository')
+        private readonly todoRepository: InterfaceTodoRepository
     ) {}
 
     async getAllTodos(): Promise<any> {
@@ -19,11 +20,7 @@ export class TodoService {
 
     async getDetailTodo(id: number): Promise<any> {
         try {
-            const todoRecord = await this.todoRepository.findOne({
-                where: {
-                    id: id
-                }
-            });
+            const todoRecord = await this.todoRepository.findById(id);
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
@@ -42,11 +39,7 @@ export class TodoService {
 
     async UpdateTodo(id: number, body: UpdateTodoDto): Promise<any> {
         try {
-            const todoRecord = await this.todoRepository.findOne({
-                where: {
-                    id: id
-                }
-            });
+            const todoRecord = await this.todoRepository.findById(id);
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
@@ -59,11 +52,7 @@ export class TodoService {
 
     async deleteTodo(id: number): Promise<any> {
         try {
-            const todoRecord = await this.todoRepository.findOne({
-                where: {
-                    id: id
-                }
-            });
+            const todoRecord = await this.todoRepository.findById(id);
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }

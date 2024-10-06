@@ -4,13 +4,16 @@ import { TodoBusiness } from "./todo/todo.business";
 import { TodoService } from "src/services/todo.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Todo } from "./todo/entities/todo.entity";
+import { InterfaceTodoRepository } from "src/repositories/interface.todo";
+import { TodoRepository } from "src/repositories/todo.repository";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Todo])],
     controllers: [TodoController],
     providers: [
         TodoBusiness,
-        TodoService
+        TodoService,
+        { provide: 'InterfaceTodoRepository', useClass: TodoRepository}
     ],
 })
 export class TodoModule {}
