@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TodoModule } from './modules/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './modules/user.module';
 
 
 @Module({
@@ -16,7 +17,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    TodoModule
+    TodoModule,
+    UserModule
   ],
   controllers: [],
   providers: [AppService],
