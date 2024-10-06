@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class TodoEntity {
+export class Todo {
     @PrimaryGeneratedColumn({ name: 'id', type: 'int' })
     id?: number;
 

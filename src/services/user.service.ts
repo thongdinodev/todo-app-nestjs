@@ -10,7 +10,7 @@ import * as bcrypt from "bcrypt";
 export class UserService {
     constructor(
         @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>
     ) {}
 
     async getUserByUsername(username: string): Promise<any> {
@@ -41,6 +41,15 @@ export class UserService {
             return user;
           }
           return null;
+    }
+
+    async findOne(username: string) {
+        const user = await this.userRepository.findOne({
+            where: {
+                username
+            }
+        });
+        return user
     }
 
 }
