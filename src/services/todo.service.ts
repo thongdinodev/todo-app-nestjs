@@ -3,14 +3,14 @@ import { UpdateTodoDto } from "src/modules/todo/dto/update.todo.dto";
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { TodoEntity } from "src/modules/todo/entities/todo.entity";
+import { Todo } from "src/modules/todo/entities/todo.entity";
 import { Repository } from "typeorm";
 
 @Injectable()
 export class TodoService {
     constructor(
-        @InjectRepository(TodoEntity)
-        private readonly todoRepository: Repository<TodoEntity>
+        @InjectRepository(Todo)
+        private readonly todoRepository: Repository<Todo>
     ) {}
 
     async getAllTodos(): Promise<any> {
