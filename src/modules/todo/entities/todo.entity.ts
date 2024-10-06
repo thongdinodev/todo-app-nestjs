@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/modules/user/entities/user.entity";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 
 @Entity()
 export class Todo {
@@ -16,4 +17,8 @@ export class Todo {
 
     @Column({ name: 'deadline' })
     deadline: Date;
+
+    @ManyToOne(() => User, (owner: User) => owner.todos)
+    @JoinColumn({ name: 'owner_id' })
+    public owner: User;
 }
