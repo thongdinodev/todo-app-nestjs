@@ -1,5 +1,5 @@
 import { User } from "src/modules/user/entities/user.entity";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, DeleteDateColumn } from "typeorm";
 
 @Entity()
 export class Todo {
@@ -21,4 +21,7 @@ export class Todo {
     @ManyToOne(() => User, (user: User) => user.todos)
     @JoinColumn({ name: 'user_id' })
     public user: User;
+
+    @DeleteDateColumn()
+    DeleteAt?: Date;
 }

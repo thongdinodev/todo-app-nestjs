@@ -51,8 +51,12 @@ export class TodoController {
     }
 
     @UseGuards(AuthGuard)
-    @Delete('/todos/:id')
-    async deleteTodo(@Param('id') id: number) {
-        return await this.todoBusiness.deleteTodo(id)
+    @Delete('/todos/:id/soft-delete')
+    async softDeleteTodo(
+        @Param('id') id: number,
+        @Req() req: Request
+    ) {                
+        const user: User = req.user;
+        return await this.todoBusiness.softDeleteTodo(id, user);
     }
 }

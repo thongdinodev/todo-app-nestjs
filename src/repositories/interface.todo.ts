@@ -7,5 +7,5 @@ export interface InterfaceTodoRepository {
     findById(id: number, user: any): Promise<any>;
     save(todo: Todo): Promise<any>;
     delete(id: number): Promise<any>;
-    
+    softDelete(id: number): Promise<any>;
 }

@@ -61,14 +61,15 @@ export class TodoService {
         }
     }
 
-    async deleteTodo(id: number): Promise<any> {
-        const user: any = 'fsdf';
+    async softDeleteTodo(id: number, user: any): Promise<any> {                
         try {
             const todoRecord = await this.todoRepository.findById(id, user);
+            
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
-            await this.todoRepository.delete(id)
+            
+            await this.todoRepository.softDelete(id);
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
