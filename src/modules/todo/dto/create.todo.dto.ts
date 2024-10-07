@@ -3,4 +3,5 @@
     description: string;
     completed: boolean;
     deadline: Date;
+    owner_id: number
  }

@@ -6,9 +6,13 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Todo } from "./todo/entities/todo.entity";
 import { InterfaceTodoRepository } from "src/repositories/interface.todo";
 import { TodoRepository } from "src/repositories/todo.repository";
+import { UserModule } from "./user.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Todo])],
+    imports: [
+        UserModule,
+        TypeOrmModule.forFeature([Todo])
+    ],
     controllers: [TodoController],
     providers: [
         TodoBusiness,

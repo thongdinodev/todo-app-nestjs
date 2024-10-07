@@ -12,6 +12,6 @@ export class User {
     @Column({ name: 'password' })
     password: string;
 
-    @OneToMany(() => Todo, (todo: Todo) => todo.owner)
+    @OneToMany(() => Todo, (todo: Todo) => todo.user)
     public todos?: Todo[];
 }

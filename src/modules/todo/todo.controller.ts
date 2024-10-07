@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Inject, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Patch, Delete, Body, Param, Inject, UseGuards, Req } from "@nestjs/common";
 import { CreateTodoDto } from "./dto/create.todo.dto";
 import { UpdateTodoDto } from "./dto/update.todo.dto";
 import { TodoBusiness } from "./todo.business";
 import { AuthGuard } from "../authentication/authentication.guard";
+import { Request } from "express";
+import { Todo } from "./entities/todo.entity";
+import { User } from "../user/entities/user.entity";
 
 @Controller()
 export class TodoController {
@@ -13,8 +16,11 @@ export class TodoController {
 
     @UseGuards(AuthGuard)
     @Get('/todos')
-    async getAllTodos() {
-        return await this.todoBusiness.getAllTodos();
+    async getAllTodos(
+        @Req() req: Request
+    ) {
+        const user: User = req.user;
+        return await this.todoBusiness.getAllTodos(user);
     }
 
     @UseGuards(AuthGuard)
@@ -25,14 +31,23 @@ export class TodoController {
 
     @UseGuards(AuthGuard)
     @Post('/todos')
-    async postTodo(@Body() createTodoDto: CreateTodoDto ) {
-        return await this.todoBusiness.postTodo(createTodoDto);
+    async postTodo(
+        @Body() createTodoDto: CreateTodoDto,
+        @Req() req: Request
+    ): Promise<Todo> {  
+        const user: User = req.user;      
+        return await this.todoBusiness.postTodo(createTodoDto, user);
     }
 
     @UseGuards(AuthGuard)
     @Patch('/todos/:id')
-    async UpdateTodo(@Param('id') id: number, @Body() updateTodoDto: UpdateTodoDto) {
-        return await this.todoBusiness.UpdateTodo(id, updateTodoDto);
+    async UpdateTodo(
+        @Param('id') id: number, 
+        @Body() updateTodoDto: UpdateTodoDto,
+        @Req() req: Request
+    ) {
+        const user: User = req.user;
+        return await this.todoBusiness.UpdateTodo(id, updateTodoDto, user);
     }
 
     @UseGuards(AuthGuard)

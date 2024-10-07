@@ -18,7 +18,7 @@ export class Todo {
     @Column({ name: 'deadline' })
     deadline: Date;
 
-    @ManyToOne(() => User, (owner: User) => owner.todos)
-    @JoinColumn({ name: 'owner_id' })
-    public owner: User;
+    @ManyToOne(() => User, (user: User) => user.todos)
+    @JoinColumn({ name: 'user_id' })
+    public user: User;
 }

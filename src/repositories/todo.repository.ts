@@ -3,6 +3,7 @@ import { Todo } from "src/modules/todo/entities/todo.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { InterfaceTodoRepository } from "./interface.todo";
+import { User } from "src/modules/user/entities/user.entity";
 
 @Injectable()
 export class TodoRepository implements InterfaceTodoRepository{
@@ -11,16 +12,26 @@ export class TodoRepository implements InterfaceTodoRepository{
         private readonly repository: Repository<Todo>
     ) {}
 
-    async find(): Promise<Todo[]> {
-        return this.repository.find();
+    async find(condition: any, relationOption: any): Promise<Todo[]> {
+        return this.repository.find({ 
+            // select: { title: true },
+            where: { user: { id: condition.sub } },
+            relations: [relationOption]
+        });
     }
 
     async findOneByCondition(condition: object): Promise<Todo> {
         return this.repository.findOne({ where: condition});
     }
 
-    async findById(id: number): Promise<any> {
-        return this.repository.findOne({ where: {id} })
+    async findById(id: number, user: any): Promise<any> {
+        return this.repository.findOne({ 
+            where: { 
+                id,
+                user: { id: user.sub }
+            },
+            relations: ['user']
+        })
     }
     
     async create(body: Todo): Promise<Todo> {
