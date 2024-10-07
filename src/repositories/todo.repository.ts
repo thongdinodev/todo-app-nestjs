@@ -12,24 +12,30 @@ export class TodoRepository implements InterfaceTodoRepository{
         private readonly repository: Repository<Todo>
     ) {}
 
-    async findAll(): Promise<Todo[]> {
+    async findAll(condition: object): Promise<Todo[]> {
         return this.repository.find({
-            where: {
-                status: true
-            }
+            where: condition
+        });
+    }
+    
+    async findOneById(id: number): Promise<any> {
+        return this.repository.findOne({
+            where: { id } as any
+        })
+    }
+
+    async findOneByCondition(condition: object): Promise<Todo> {
+        return this.repository.findOne({ 
+            where: condition,
+            relations: ['user']
         });
     }
 
-    async findAllTodosUser(condition: any, relationOption: any): Promise<Todo[]> {
+    async findAllTodosUser(condition: object): Promise<Todo[]> {
         return this.repository.find({ 
             // select: { title: true },
-            where: { 
-                status: true,
-                user: { 
-                    id: condition.sub 
-                } 
-            },
-            relations: [relationOption],
+            where: condition,
+            relations: ['user'],
             select: { 
                 user: {
                     password: false,
@@ -39,36 +45,6 @@ export class TodoRepository implements InterfaceTodoRepository{
         });
     }
 
-    async findOneByCondition(condition: object): Promise<Todo> {
-        return this.repository.findOne({ where: condition});
-    }
-
-    async findByUserId(id: number, user: any): Promise<any> {
-        return this.repository.findOne({ 
-            where: { 
-                id,
-                user: { id: user.sub }
-            },
-            relations: ['user'],
-            
-        })
-    }
-
-    async findById(id: number, user: any): Promise<any> {
-        return this.repository.findOne({
-            where: {
-                id
-            }
-        })
-    }
-
-    async findOneById(id: number): Promise<any> {
-        return this.repository.findOne({
-            where: { 
-                id
-            }
-        })
-    }
     
     async create(body: Todo): Promise<Todo> {
         return this.repository.create(body);
@@ -76,10 +52,6 @@ export class TodoRepository implements InterfaceTodoRepository{
 
     async save(todo: Todo): Promise<any> {
         return this.repository.save(todo);
-    }
-
-    async delete(id: number): Promise<any> {
-        return this.repository.delete(id);
     }
 
     async softDelete(id: number): Promise<any> {
