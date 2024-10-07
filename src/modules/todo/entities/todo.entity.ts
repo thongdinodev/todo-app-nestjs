@@ -1,5 +1,5 @@
 import { User } from "src/modules/user/entities/user.entity";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, DeleteDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 
 @Entity()
 export class Todo {
@@ -12,16 +12,19 @@ export class Todo {
     @Column({ name: 'description' })
     description: string;
 
-    @Column({ name: 'completed'})
+    @Column({ name: 'completed', default: false })
     completed: boolean;
 
     @Column({ name: 'deadline' })
     deadline: Date;
 
+    @Column({ name: 'status', default: true , select: false })
+    status: boolean;
+
     @ManyToOne(() => User, (user: User) => user.todos)
     @JoinColumn({ name: 'user_id' })
     public user: User;
 
-    @DeleteDateColumn()
-    DeleteAt?: Date;
+    // @DeleteDateColumn()
+    // DeleteAt?: Date;
 }

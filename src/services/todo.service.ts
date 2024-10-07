@@ -9,6 +9,7 @@ import { InterfaceTodoRepository } from "src/repositories/interface.todo";
 import { User } from "src/modules/user/entities/user.entity";
 import { CreateUserDto } from "src/modules/user/dto/create.user.dto";
 import { UserService } from "./user.service";
+import { CreateResponseTodoDto } from "src/modules/todo/dto/create.response.todo.dto";
 
 @Injectable()
 export class TodoService {
@@ -19,13 +20,14 @@ export class TodoService {
     ) {}
 
     async getAllTodos(user: any): Promise<any> {        
-        return await this.todoRepository.find(user, 'user');
+        const todos = await this.todoRepository.find(user, 'user');
+        return todos;  
     }
 
     async getDetailTodo(id: number): Promise<any> {
-        const user: any = 'fsdfdsf';
+        
         try {
-            const todoRecord = await this.todoRepository.findById(id, user);
+            const todoRecord = await this.todoRepository.findOneById(id);
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
@@ -37,8 +39,9 @@ export class TodoService {
     }
 
     async postTodo(body: CreateTodoDto, { username }: CreateUserDto ): Promise<any> {
-        const user = await this.userService.findOne(username);
-        
+        const user = await this.userService.findOne(username);        
+        user.password = undefined;
+
         const newTodo = await this.todoRepository.create({
             ...body,
             user
@@ -50,11 +53,16 @@ export class TodoService {
 
     async UpdateTodo(id: number, body: UpdateTodoDto, user: any): Promise<any> {
         try {
-            const todoRecord = await this.todoRepository.findById(id, user);
+            const todoRecord = await this.todoRepository.findByUserId(id, user);
+            
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
+            
             Object.assign(todoRecord, body);
+            console.log(todoRecord);
+            todoRecord.user.password = undefined;
+            
             return this.todoRepository.save(todoRecord);
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,13 +71,18 @@ export class TodoService {
 
     async softDeleteTodo(id: number, user: any): Promise<any> {                
         try {
-            const todoRecord = await this.todoRepository.findById(id, user);
+            const todoRecord = await this.todoRepository.findByUserId(id, user);
+            console.log(todoRecord);
+            
             
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
             
-            await this.todoRepository.softDelete(id);
+            todoRecord.user.password = undefined;
+            todoRecord.status = false;
+            
+            return this.todoRepository.save(todoRecord);
         } catch (error) {
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }

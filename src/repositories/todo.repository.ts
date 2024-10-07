@@ -15,8 +15,19 @@ export class TodoRepository implements InterfaceTodoRepository{
     async find(condition: any, relationOption: any): Promise<Todo[]> {
         return this.repository.find({ 
             // select: { title: true },
-            where: { user: { id: condition.sub } },
-            relations: [relationOption]
+            where: { 
+                status: true,
+                user: { 
+                    id: condition.sub 
+                } 
+            },
+            relations: [relationOption],
+            select: { 
+                user: {
+                    password: false,
+                    username: true
+                }
+            }
         });
     }
 
@@ -24,13 +35,30 @@ export class TodoRepository implements InterfaceTodoRepository{
         return this.repository.findOne({ where: condition});
     }
 
-    async findById(id: number, user: any): Promise<any> {
+    async findByUserId(id: number, user: any): Promise<any> {
         return this.repository.findOne({ 
             where: { 
                 id,
                 user: { id: user.sub }
             },
-            relations: ['user']
+            relations: ['user'],
+            
+        })
+    }
+
+    async findById(id: number, user: any): Promise<any> {
+        return this.repository.findOne({
+            where: {
+                id
+            }
+        })
+    }
+
+    async findOneById(id: number): Promise<any> {
+        return this.repository.findOne({
+            where: { 
+                id
+            }
         })
     }
     
