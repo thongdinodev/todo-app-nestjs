@@ -11,7 +11,7 @@ export class User {
     username: string;
 
     @Exclude()
-    @Column({ name: 'password', select: false })
+    @Column({ name: 'password' })
     password: string;
 
     @OneToMany(() => Todo, (todo: Todo) => todo.user)

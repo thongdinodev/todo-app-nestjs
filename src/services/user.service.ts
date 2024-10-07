@@ -17,7 +17,8 @@ export class UserService {
         try {
             const userRecord = await this.userRepository.findOne({
                 where: {
-                    username: username
+                    username: username,
+
                 }
             });
             if (!userRecord) {

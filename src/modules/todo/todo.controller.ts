@@ -23,7 +23,7 @@ export class TodoController {
         return await this.todoBusiness.getAllTodos(user);
     }
 
-    @UseGuards(AuthGuard)
+    //@UseGuards(AuthGuard)
     @Get('/todos/:id')
     async getDetailTodo(@Param('id') id: number) {
         return await this.todoBusiness.getDetailTodo(id);
