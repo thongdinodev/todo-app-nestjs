@@ -14,13 +14,18 @@ export class TodoController {
         //super();
     }
 
-    @UseGuards(AuthGuard)
     @Get('/todos')
-    async getAllTodos(
+    async getAllTodos() {
+        return await this.todoBusiness.getAll();
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('/todos/me')
+    async getAllTodosUser(
         @Req() req: Request
     ) {
         const user: User = req.user;
-        return await this.todoBusiness.getAllTodos(user);
+        return await this.todoBusiness.getAllTodosUser(user);
     }
 
     //@UseGuards(AuthGuard)

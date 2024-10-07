@@ -8,8 +8,12 @@ import { User } from "../user/entities/user.entity";
 export class TodoBusiness {
     @Inject() private readonly todoService: TodoService;
 
-    async getAllTodos(user: User) {
-        return await this.todoService.getAllTodos(user);
+    async getAllTodosUser(user: User) {
+        return await this.todoService.findAllTodosUser(user);
+    }
+
+    async getAll() {
+        return await this.todoService.findAll();
     }
 
     async getDetailTodo(id: number) {
