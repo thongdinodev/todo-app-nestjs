@@ -24,7 +24,7 @@ export class TodoBusiness {
         return await this.todoService.UpdateTodo(id, updateTodoDto, user);
     }
 
-    async deleteTodo(id: number) {
-        return await this.todoService.deleteTodo(id)
+    async softDeleteTodo(id: number, user: any) {
+        return await this.todoService.softDeleteTodo(id, user);
     }
 }

@@ -45,4 +45,8 @@ export class TodoRepository implements InterfaceTodoRepository{
     async delete(id: number): Promise<any> {
         return this.repository.delete(id);
     }
+
+    async softDelete(id: number): Promise<any> {
+        return this.repository.softDelete(id)
+    }
 }
