@@ -19,9 +19,14 @@ export class TodoService {
         private readonly userService: UserService
     ) {}
 
-    async getAllTodos(user: any): Promise<any> {        
-        const todos = await this.todoRepository.find(user, 'user');
-        return todos;  
+    async findAllTodosUser(user: any): Promise<any> {        
+        const todosOfUser = await this.todoRepository.findAllTodosUser(user, 'user');
+        return todosOfUser;  
+    }
+
+    async findAll(): Promise<any> {
+        const todos = await this.todoRepository.findAll();
+        return todos;
     }
 
     async getDetailTodo(id: number): Promise<any> {
@@ -72,8 +77,6 @@ export class TodoService {
     async softDeleteTodo(id: number, user: any): Promise<any> {                
         try {
             const todoRecord = await this.todoRepository.findByUserId(id, user);
-            console.log(todoRecord);
-            
             
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);

@@ -2,7 +2,8 @@ import { Todo } from "src/modules/todo/entities/todo.entity";
 
 export interface InterfaceTodoRepository {
     create(dto: any): Promise<any>;
-    find(condition: any, relationOption: any): Promise<Todo[]>;
+    findAllTodosUser(condition: any, relationOption: any): Promise<Todo[]>;
+    findAll(): Promise<Todo[]>;
     findOneByCondition(condition: object): Promise<Todo>;
     findByUserId(id: number, user: any): Promise<any>;
     findOneById(id: number): Promise<any>;

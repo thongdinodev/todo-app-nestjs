@@ -12,7 +12,15 @@ export class TodoRepository implements InterfaceTodoRepository{
         private readonly repository: Repository<Todo>
     ) {}
 
-    async find(condition: any, relationOption: any): Promise<Todo[]> {
+    async findAll(): Promise<Todo[]> {
+        return this.repository.find({
+            where: {
+                status: true
+            }
+        });
+    }
+
+    async findAllTodosUser(condition: any, relationOption: any): Promise<Todo[]> {
         return this.repository.find({ 
             // select: { title: true },
             where: { 
