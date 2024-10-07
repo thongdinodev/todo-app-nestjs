@@ -10,6 +10,7 @@ import { User } from "src/modules/user/entities/user.entity";
 import { CreateUserDto } from "src/modules/user/dto/create.user.dto";
 import { UserService } from "./user.service";
 import { CreateResponseTodoDto } from "src/modules/todo/dto/create.response.todo.dto";
+import { Todo } from "src/modules/todo/entities/todo.entity";
 
 @Injectable()
 export class TodoService {
@@ -19,13 +20,23 @@ export class TodoService {
         private readonly userService: UserService
     ) {}
 
-    async findAllTodosUser(user: any): Promise<any> {        
-        const todosOfUser = await this.todoRepository.findAllTodosUser(user, 'user');
+    async findAllTodosUser(user: any): Promise<any> {     
+        let condition: object = {
+            status: true,
+            user: { 
+                id: user.sub 
+            } 
+        }   
+        const todosOfUser = await this.todoRepository.findAllTodosUser(condition);
         return todosOfUser;  
     }
 
     async findAll(): Promise<any> {
-        const todos = await this.todoRepository.findAll();
+        let condition: object = {
+            status: true
+        }        
+        
+        const todos = await this.todoRepository.findAll(condition);
         return todos;
     }
 
@@ -43,29 +54,35 @@ export class TodoService {
         }
     }
 
-    async postTodo(body: CreateTodoDto, { username }: CreateUserDto ): Promise<any> {
+    async postTodo(body: CreateTodoDto, { username }: CreateUserDto ): Promise<Todo> {
         const user = await this.userService.findOne(username);        
         user.password = undefined;
 
-        const newTodo = await this.todoRepository.create({
+        const newTodo: Todo = await this.todoRepository.create({
             ...body,
             user
         }); 
         
         await this.todoRepository.save(newTodo);
+        
         return newTodo;
     }
 
     async UpdateTodo(id: number, body: UpdateTodoDto, user: any): Promise<any> {
+        let condition: object = {
+            id,
+            user: {
+                id: user.id
+            }
+        }
         try {
-            const todoRecord = await this.todoRepository.findByUserId(id, user);
+            const todoRecord = await this.todoRepository.findOneByCondition(condition);
             
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
             }
             
             Object.assign(todoRecord, body);
-            console.log(todoRecord);
             todoRecord.user.password = undefined;
             
             return this.todoRepository.save(todoRecord);
@@ -74,9 +91,15 @@ export class TodoService {
         }
     }
 
-    async softDeleteTodo(id: number, user: any): Promise<any> {                
+    async softDeleteTodo(id: number, user: any): Promise<any> {      
+        let condition: object = {
+            id,
+            user: {
+                id: user.id
+            }
+        }          
         try {
-            const todoRecord = await this.todoRepository.findByUserId(id, user);
+            const todoRecord = await this.todoRepository.findOneByCondition(condition);
             
             if (!todoRecord) {
                 throw new HttpException('Todo not found', HttpStatus.NOT_FOUND);
