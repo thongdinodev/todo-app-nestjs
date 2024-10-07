@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Todo } from "src/modules/todo/entities/todo.entity";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User {
@@ -9,7 +10,8 @@ export class User {
     @Column({ name: 'username', unique: true })
     username: string;
 
-    @Column({ name: 'password' })
+    @Exclude()
+    @Column({ name: 'password', select: false })
     password: string;
 
     @OneToMany(() => Todo, (todo: Todo) => todo.user)
