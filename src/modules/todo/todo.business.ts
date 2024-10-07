@@ -3,6 +3,9 @@ import { CreateTodoDto } from "./dto/create.todo.dto";
 import { UpdateTodoDto } from "./dto/update.todo.dto";
 import { TodoService } from "src/services/todo.service";
 import { User } from "../user/entities/user.entity";
+import { UserJwtResponse } from "../user/dto/user.jwt.response";
+import { InterfaceQueryTodo } from "../interfaces/interface.todo";
+import { InterfacePagination } from "../interfaces/interface.pagination";
 
 @Injectable()
 export class TodoBusiness {
@@ -12,8 +15,8 @@ export class TodoBusiness {
         return await this.todoService.findAllTodosUser(user);
     }
 
-    async getAll() {
-        return await this.todoService.findAll();
+    async getAll(query: InterfaceQueryTodo) {
+        return await this.todoService.findAll(query);
     }
 
     async getDetailTodo(id: number) {

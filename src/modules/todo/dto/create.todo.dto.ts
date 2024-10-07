@@ -1,5 +1,15 @@
+ import { Expose } from "@nestjs/class-transformer";
+ 
  export class CreateTodoDto {
+   @Expose()
     title: string;
-    description: string;
-    deadline: Date;
+
+   @Expose()
+   description: string;
+
+   @Expose()
+   deadline: Date;
+
+   @Expose()
+   completed: boolean
  }
