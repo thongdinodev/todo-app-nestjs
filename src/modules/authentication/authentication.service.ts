@@ -54,7 +54,7 @@ export class AuthenticationService {
                 throw new HttpException('username or password is invalid', HttpStatus.UNAUTHORIZED);
             }
 
-            const payload = { sub: user.id, username: user.username};
+            const payload = { id: user.id, username: user.username};
 
             const token = this.jwtService.sign(payload);
 

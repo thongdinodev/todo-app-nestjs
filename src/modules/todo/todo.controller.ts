@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Inject, UseGuards, Req } from "@nestjs/common";
+import { Controller, Get, Post, Patch, Delete, Body, Param, Inject, UseGuards, Req, Query } from "@nestjs/common";
 import { CreateTodoDto } from "./dto/create.todo.dto";
 import { UpdateTodoDto } from "./dto/update.todo.dto";
 import { TodoBusiness } from "./todo.business";
@@ -6,6 +6,9 @@ import { AuthGuard } from "../authentication/authentication.guard";
 import { Request } from "express";
 import { Todo } from "./entities/todo.entity";
 import { User } from "../user/entities/user.entity";
+import { UserJwtResponse } from "../user/dto/user.jwt.response";
+import { InterfaceQueryTodo } from "../interfaces/interface.todo";
+import { InterfacePagination } from "../interfaces/interface.pagination";
 
 @Controller()
 export class TodoController {
@@ -15,8 +18,10 @@ export class TodoController {
     }
 
     @Get('/todos')
-    async getAllTodos() {
-        return await this.todoBusiness.getAll();
+    async getAllTodos(
+        @Query() query: InterfaceQueryTodo
+    ) {        
+        return await this.todoBusiness.getAll(query);
     }
 
     @UseGuards(AuthGuard)

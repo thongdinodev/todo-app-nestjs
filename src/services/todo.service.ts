@@ -11,6 +11,9 @@ import { CreateUserDto } from "src/modules/user/dto/create.user.dto";
 import { UserService } from "./user.service";
 import { CreateResponseTodoDto } from "src/modules/todo/dto/create.response.todo.dto";
 import { Todo } from "src/modules/todo/entities/todo.entity";
+import { UserJwtResponse } from "src/modules/user/dto/user.jwt.response";
+import { InterfaceQueryTodo } from "src/modules/interfaces/interface.todo";
+import { InterfacePagination } from "src/modules/interfaces/interface.pagination";
 
 @Injectable()
 export class TodoService {
@@ -20,27 +23,34 @@ export class TodoService {
         private readonly userService: UserService
     ) {}
 
-    async findAllTodosUser(user: any): Promise<any> {     
+    async findAllTodosUser(user: User): Promise<Todo[]> { 
+        console.log(user.id);
+            
         let condition: object = {
             status: true,
             user: { 
-                id: user.sub 
+                id: user.id 
             } 
         }   
+
         const todosOfUser = await this.todoRepository.findAllTodosUser(condition);
         return todosOfUser;  
     }
 
-    async findAll(): Promise<any> {
-        let condition: object = {
-            status: true
-        }        
+    async findAll(query: InterfaceQueryTodo): Promise<Todo[]> { 
         
+        let condition = {
+            ...query,
+            status: true, 
+        }       
+
+        console.log(condition);
+         
         const todos = await this.todoRepository.findAll(condition);
         return todos;
     }
 
-    async getDetailTodo(id: number): Promise<any> {
+    async getDetailTodo(id: number): Promise<Todo> {
         
         try {
             const todoRecord = await this.todoRepository.findOneById(id);
@@ -68,7 +78,9 @@ export class TodoService {
         return newTodo;
     }
 
-    async UpdateTodo(id: number, body: UpdateTodoDto, user: any): Promise<any> {
+    async UpdateTodo(id: number, body: UpdateTodoDto, user: User): Promise<Todo> {
+        
+        
         let condition: object = {
             id,
             user: {
@@ -91,7 +103,7 @@ export class TodoService {
         }
     }
 
-    async softDeleteTodo(id: number, user: any): Promise<any> {      
+    async softDeleteTodo(id: number, user: UserJwtResponse): Promise<Todo> {      
         let condition: object = {
             id,
             user: {
