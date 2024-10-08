@@ -12,8 +12,8 @@ import { UserService } from "./user.service";
 import { CreateResponseTodoDto } from "src/modules/todo/dto/create.response.todo.dto";
 import { Todo } from "src/modules/todo/entities/todo.entity";
 import { UserJwtResponse } from "src/modules/user/dto/user.jwt.response";
-import { InterfaceQueryTodo } from "src/modules/interfaces/interface.todo";
-import { InterfacePagination } from "src/modules/interfaces/interface.pagination";
+import { QueryTodoDto } from "src/modules/queryPaginate/query.todo.dto";
+import { take } from "rxjs";
 
 @Injectable()
 export class TodoService {
@@ -37,16 +37,29 @@ export class TodoService {
         return todosOfUser;  
     }
 
-    async findAll(query: InterfaceQueryTodo): Promise<Todo[]> { 
+    async findAll(query: QueryTodoDto): Promise<Todo[]> { 
         
         let condition = {
-            ...query,
+            title: query.title,
+            description: query.description,
+            deadline: query.deadline,
+            completed: query.completed,
             status: true, 
         }       
 
-        console.log(condition);
+        const options = {
+            skip: query.skip,
+            take: query.take,
+            order: {
+                deadline: 'ASC',
+            }
+        }
+
+        if (query.order === '-deadline') {
+            options.order.deadline = 'DESC'
+        }
          
-        const todos = await this.todoRepository.findAll(condition);
+        const todos = await this.todoRepository.findAll(condition, options);
         return todos;
     }
 

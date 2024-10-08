@@ -1,11 +1,9 @@
-import { InterfacePagination } from "src/modules/interfaces/interface.pagination";
-import { InterfaceQueryTodo } from "src/modules/interfaces/interface.todo";
 import { Todo } from "src/modules/todo/entities/todo.entity";
 
 export interface InterfaceTodoRepository {
     create(dto: any): Promise<Todo>;
 
-    findAll(query: InterfaceQueryTodo): Promise<Todo[]>;
+    findAll(condition: object, options?: object): Promise<Todo[]>;
 
     findOneById(id: number): Promise<Todo>;
     

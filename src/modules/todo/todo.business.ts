@@ -3,9 +3,7 @@ import { CreateTodoDto } from "./dto/create.todo.dto";
 import { UpdateTodoDto } from "./dto/update.todo.dto";
 import { TodoService } from "src/services/todo.service";
 import { User } from "../user/entities/user.entity";
-import { UserJwtResponse } from "../user/dto/user.jwt.response";
-import { InterfaceQueryTodo } from "../interfaces/interface.todo";
-import { InterfacePagination } from "../interfaces/interface.pagination";
+import { QueryTodoDto } from "../queryPaginate/query.todo.dto";
 
 @Injectable()
 export class TodoBusiness {
@@ -15,7 +13,7 @@ export class TodoBusiness {
         return await this.todoService.findAllTodosUser(user);
     }
 
-    async getAll(query: InterfaceQueryTodo) {
+    async getAll(query: QueryTodoDto) {
         return await this.todoService.findAll(query);
     }
 

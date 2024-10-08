@@ -3,9 +3,7 @@ import { Todo } from "src/modules/todo/entities/todo.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { InterfaceTodoRepository } from "./interface.todo";
-import { User } from "src/modules/user/entities/user.entity";
-import { InterfaceQueryTodo } from "src/modules/interfaces/interface.todo";
-import { InterfacePagination } from "src/modules/interfaces/interface.pagination";
+import { QueryTodoDto } from "src/modules/queryPaginate/query.todo.dto";
 
 @Injectable()
 export class TodoRepository implements InterfaceTodoRepository{
@@ -14,11 +12,12 @@ export class TodoRepository implements InterfaceTodoRepository{
         private readonly repository: Repository<Todo>
     ) {}
 
-    async findAll(condition: InterfaceQueryTodo): Promise<Todo[]> {
+    async findAll(condition: object, options?: object): Promise<Todo[]> {
         return this.repository.find({
-            where: condition, 
-            
-        });
+            where: condition,
+            ...options
+        })
+        
     }
     
     async findOneById(id: number): Promise<Todo> {
