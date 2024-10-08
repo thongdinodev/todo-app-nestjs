@@ -6,9 +6,7 @@ import { AuthGuard } from "../authentication/authentication.guard";
 import { Request } from "express";
 import { Todo } from "./entities/todo.entity";
 import { User } from "../user/entities/user.entity";
-import { UserJwtResponse } from "../user/dto/user.jwt.response";
-import { InterfaceQueryTodo } from "../interfaces/interface.todo";
-import { InterfacePagination } from "../interfaces/interface.pagination";
+import { QueryTodoDto } from "../queryPaginate/query.todo.dto";
 
 @Controller()
 export class TodoController {
@@ -19,8 +17,11 @@ export class TodoController {
 
     @Get('/todos')
     async getAllTodos(
-        @Query() query: InterfaceQueryTodo
-    ) {        
+        @Query() 
+        query: QueryTodoDto
+    ) {             
+        console.log(query);
+           
         return await this.todoBusiness.getAll(query);
     }
 
